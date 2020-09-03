@@ -38,7 +38,7 @@ public class BaseTest {
   @BeforeTest
   public void beforeTest(String platformName, String platformVersion , String deviceName)  {  
 	    try {  
-	    	
+
 	    	props = new Properties(); 
 	    	String propFileName="config.properties"; 
 	    	
@@ -46,18 +46,23 @@ public class BaseTest {
 	    	props.load(inputStream);
 	    	
 	    	
-	    	DesiredCapabilities  capabilities = new DesiredCapabilities();
+	    	DesiredCapabilities  capabilities = new DesiredCapabilities(); 
+			URL urlApp = getClass().getClassLoader().getResource(props.getProperty("androidAppLocation")); 
+			//capabilities.setCapability("app",  urlApp); 
+			System.out.println("URL folder: " + urlApp); 
+			
+			capabilities.setCapability("app",  "C:\\Users\\CSM\\Downloads\\Android.SauceLabs.Mobile.Sample.app.2.3.0.apk");  
+			
 			capabilities.setCapability("platformName", platformName);
 			capabilities.setCapability("platformVersion", platformVersion);
 			capabilities.setCapability("deviceName", deviceName); 
 			capabilities.setCapability("automationName", props.getProperty("androidAutomationName")); 
 			
-			URL urlApp = getClass().getClassLoader().getResource(props.getProperty("androidAppLocation"));
-			capabilities.setCapability("app",  urlApp); 
+   
 			
 			capabilities.setCapability("appActivity", props.getProperty("androidAppActivity"));
-			capabilities.setCapability("appPackage",  props.getProperty("androidAppPackage"));
-			
+			capabilities.setCapability("appPackage",  props.getProperty("androidAppPackage")); 
+		
 			URL url = new URL("http://127.0.0.1:4723/wd/hub");  
 			driver = new AndroidDriver(url, capabilities);
 			String sessionId = driver.getSessionId().toString();  
